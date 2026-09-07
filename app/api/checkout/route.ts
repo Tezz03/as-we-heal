@@ -1,0 +1,6 @@
+import { NextResponse } from 'next/server'
+import Stripe from 'stripe'
+import { ensureTables, pool } from '@/lib/db'
+
+const products = { produce: { name: 'Seasonal produce box', amount: 3800 }, pantry: { name: 'Market pantry bundle', amount: 2400 } }
+export async function POST(request: Request) { try { const { productId = 'produce' } = await request.json(); const product = products[productId as keyof typeof products]; if (!product) return NextResponse.json({ error: 'Invalid product' }, { status: 400 }); const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!); const session = await stripe.checkout.sessions.create({ mode: 'payment', line_items: [{ price_data: { currency: 'usd', product_data: { name: product.name }, unit_amount: product.amount }, quantity: 1 }], success_url: `${request.headers.get('origin')}/farm?success=1`, cancel_url: `${request.headers.get('origin')}/farm?canceled=1`, integration_identifier: `as-we-heal-${Math.random().toString(36).slice(2, 10)}` }); await ensureTables(); await pool.query('INSERT INTO farm_orders (product, amount, stripe_session_id) VALUES ($1, $2, $3)', [product.name, product.amount, session.id]); return NextResponse.json({ url: session.url }) } catch { return NextResponse.json({ error: 'Unable to start checkout' }, { status: 500 }) } }

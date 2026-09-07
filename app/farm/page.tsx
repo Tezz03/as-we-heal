@@ -1,0 +1,4 @@
+import { SiteShell, LazyImage, SectionIntro } from '@/components/site-shell'
+import { FarmShop } from '@/components/forms'
+
+export default function FarmPage() { return <SiteShell><main><section className="farm-cover"><LazyImage src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ZgAqbB13276EhBevWTruVrnYm9RmQe.png" alt="Fresh produce arranged on a table" /></section><section className="shell farm-profile"><div className="farm-avatar"><span>AWH</span></div><div><h1>As We Heal Farm Market</h1><p>Fresh food, local hands, and a table worth gathering around.</p></div></section><section className="shell farm-body"><div className="farm-intro"><p className="eyebrow">The farm market</p><h2>Good food is a form of care.</h2><p>Seasonal produce and thoughtfully sourced staples, packed with a little more intention. Order online for neighborhood pickup in New Castle.</p></div><FarmShop /></section></main></SiteShell> }

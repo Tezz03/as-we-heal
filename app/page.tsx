@@ -1,47 +1,11 @@
-export default function Page() {
-  return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
-    </main>
-  )
-}
+import Link from 'next/link'
+import { ArrowUpRight, Leaf, HeartPulse, Sparkles } from 'lucide-react'
+import { SiteShell, LazyImage } from '@/components/site-shell'
+
+const cards = [
+  { title: 'Massage & bodywork', label: 'Restore', href: '/massage', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-PI4HAUpRAZ2OkfPNkd8FTrodt7vsLg.png', icon: HeartPulse, copy: 'Quiet, attentive care for the places that carry you.' },
+  { title: 'The farm market', label: 'Nourish', href: '/farm', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ZgAqbB13276EhBevWTruVrnYm9RmQe.png', icon: Leaf, copy: 'Fresh food and simple rituals that bring you back to the table.' },
+  { title: 'Wellness practices', label: 'Renew', href: '/services', image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=85', icon: Sparkles, copy: 'Small, steady practices for a life that feels more like yours.' },
+]
+
+export default function Page() { return <SiteShell><main><section className="hero shell"><div className="hero-copy"><p className="eyebrow">A whole-person practice</p><h1>Come back to <em>well.</em></h1><p className="hero-text">As We Heal is a neighborhood space for restorative bodywork, nourishing food, and everyday wellness in New Castle.</p><div className="hero-actions"><Link className="button button-dark" href="/services">Explore our services <ArrowUpRight size={17} /></Link><Link className="text-link" href="/contact">Say hello <ArrowUpRight size={15} /></Link></div></div><div className="hero-note"><span>01</span><p>Care is not a finish line. It is the way we move through the day.</p></div></section><section className="shell discovery"><div className="section-intro compact"><p className="eyebrow">Three ways in</p><h2>Meet yourself where you are.</h2></div><div className="discovery-grid">{cards.map(({ title, label, href, image, icon: Icon, copy }) => <Link href={href} className="feature-card" key={href}><div className="feature-image"><LazyImage src={image} alt={title} /><span className="feature-icon"><Icon size={18} /></span></div><div className="feature-content"><p className="eyebrow">{label}</p><h3>{title}</h3><p>{copy}</p><span className="card-link">Explore <ArrowUpRight size={15} /></span></div></Link>)}</div></section><section className="statement"><div className="shell statement-inner"><p className="eyebrow">Our approach</p><h2>Healing can be practical, beautiful, and shared.</h2><Link className="text-link" href="/contact">Learn about As We Heal <ArrowUpRight size={15} /></Link></div></section></main></SiteShell> }
