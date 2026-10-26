@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { ensureTables, pool } from '@/lib/db'
 import { findSession } from '@/lib/sessions'
-import { square, squareLocationId } from '@/lib/square'
+import { getStripe } from '@/lib/stripe'
 
 export async function POST(request: Request) {
   let appointmentId: number | undefined
@@ -19,15 +19,17 @@ export async function POST(request: Request) {
     appointmentId = rows[0].id
     if (!payOnline) return NextResponse.json({ ok: true })
 
-    const { paymentLink } = await square.checkout.paymentLinks.create({
-      idempotencyKey: crypto.randomUUID(),
-      quickPay: { name: `${session.name} (${session.minutes} min) · ${body.preferredDate}`, priceMoney: { amount: BigInt(session.price), currency: 'USD' }, locationId: squareLocationId },
-      checkoutOptions: { redirectUrl: `${request.headers.get('origin')}/massage?booked=paid#book` },
-      prePopulatedData: { buyerEmail: body.email },
-      paymentNote: `Appointment #${appointmentId}`,
+    const origin = request.headers.get('origin')
+    const checkout = await getStripe().checkout.sessions.create({
+      mode: 'payment',
+      line_items: [{ price_data: { currency: 'usd', product_data: { name: `${session.name} (${session.minutes} min)`, description: `Appointment on ${body.preferredDate}` }, unit_amount: session.price }, quantity: 1 }],
+      customer_email: body.email,
+      metadata: { appointmentId: String(appointmentId) },
+      success_url: `${origin}/massage?booked=paid#book`,
+      cancel_url: `${origin}/massage#book`,
     })
-    await pool.query('UPDATE appointments SET square_order_id = $1 WHERE id = $2', [paymentLink?.orderId, appointmentId])
-    return NextResponse.json({ url: paymentLink?.url })
+    await pool.query('UPDATE appointments SET stripe_session_id = $1 WHERE id = $2', [checkout.id, appointmentId])
+    return NextResponse.json({ url: checkout.url })
   } catch {
     if (appointmentId) await pool.query('DELETE FROM appointments WHERE id = $1', [appointmentId]).catch(() => {})
     return NextResponse.json({ error: 'Unable to save appointment' }, { status: 500 })

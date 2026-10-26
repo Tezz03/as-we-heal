@@ -35,12 +35,12 @@ export function AppointmentForm({ paid = false }: { paid?: boolean }) {
     </div>
     <fieldset className="payment-options">
       <legend>How would you like to pay?</legend>
-      <label className={payment === 'online' ? 'is-active' : ''}><input type="radio" name="payment" value="online" checked={payment === 'online'} onChange={() => setPayment('online')} /><span><b>Pay now</b>Secure card payment with Square</span></label>
+      <label className={payment === 'online' ? 'is-active' : ''}><input type="radio" name="payment" value="online" checked={payment === 'online'} onChange={() => setPayment('online')} /><span><b>Pay now</b>Secure card payment with Stripe</span></label>
       <label className={payment === 'office' ? 'is-active' : ''}><input type="radio" name="payment" value="office" checked={payment === 'office'} onChange={() => setPayment('office')} /><span><b>Pay at the office</b>Settle up at your visit</span></label>
     </fieldset>
     {error && <p className="form-error" role="alert">{error}</p>}
     <button className="button button-dark" type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : payment === 'online' ? 'Continue to payment' : 'Request appointment'} <span>→</span></button>
-    <small>{payment === 'online' ? 'You’ll be taken to Square’s secure checkout.' : 'No payment is due until your visit.'}</small>
+    <small>{payment === 'online' ? 'You’ll be taken to Stripe’s secure checkout.' : 'No payment is due until your visit.'}</small>
   </form>
 }
 
