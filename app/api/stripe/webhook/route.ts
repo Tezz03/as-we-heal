@@ -20,7 +20,8 @@ export async function POST(request: Request) {
     if (session.payment_status === 'paid') {
       await ensureTables()
       await pool.query("UPDATE appointments SET payment_status = 'paid' WHERE stripe_session_id = $1", [session.id])
-      await pool.query("UPDATE farm_orders SET payment_status = 'paid' WHERE stripe_session_id = $1", [session.id])
+      const customer = session.customer_details
+      await pool.query("UPDATE farm_orders SET payment_status = 'paid', customer_name = $2, customer_email = $3, customer_phone = $4 WHERE stripe_session_id = $1", [session.id, customer?.name ?? null, customer?.email ?? null, customer?.phone ?? null])
     }
   }
   return NextResponse.json({ received: true })
