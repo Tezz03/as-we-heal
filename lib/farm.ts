@@ -47,3 +47,24 @@ export function isValidPickupDay(value: string) {
 }
 
 export const formatPickupDay = (value: string) => new Date(value + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })
+
+export const farmInfo = {
+  name: 'As We Heal Farm Market',
+  category: 'Farm market',
+  tagline: 'Fresh food, local hands, and a table worth gathering around.',
+  about: 'Seasonal produce, pasture-raised eggs, and poultry, packed with a little more intention. Order online and pick up in New Castle.',
+  location: 'New Castle, Delaware',
+  hours: 'Tuesday–Saturday, 9:00 am–6:00 pm',
+  pickup: 'Order online, pick up the next open day',
+  email: 'hello@asweheal.co',
+  cover: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=1800&q=80',
+}
+
+// Sample updates — replace with real news from the farm. `action` adds a product to the order or opens a tab.
+export const farmPosts: { date: string; text: string; image?: string; action?: { productId: string } | { tab: 'apparel' | 'market'; label: string } }[] = [
+  { date: '2026-11-05', text: 'Strawberries are back this week! Grab a pint (or three) for pickup Tuesday through Saturday.', image: findFarmItem('strawberries')!.image, action: { productId: 'strawberries' } },
+  { date: '2026-11-02', text: 'New shirts just dropped. Rare Bird, Fly Different: printed to order and shipped to your door.', action: { tab: 'apparel', label: 'Shop apparel' } },
+  { date: '2026-10-29', text: 'Our hens have been busy. Pasture-raised eggs, collected daily, with the richest golden yolks.', image: findFarmItem('eggs')!.image, action: { productId: 'eggs' } },
+]
+
+export const formatPostDate = (value: string) => new Date(value + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })

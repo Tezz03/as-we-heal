@@ -1,4 +1,9 @@
-import { SiteShell, LazyImage, SectionIntro } from '@/components/site-shell'
-import { FarmCatalog } from '@/components/farm-catalog'
+import type { Metadata } from 'next'
+import { SiteShell } from '@/components/site-shell'
+import { FarmProfile } from '@/components/farm-profile'
 
-export default function FarmPage() { return <SiteShell><main><section className="farm-cover"><LazyImage src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=1600&q=80" alt="Fresh produce at a market stall" /></section><section className="shell farm-profile"><div className="farm-avatar"><span>AWH</span></div><div><h1>As We Heal Farm Market</h1><p>Fresh food, local hands, and a table worth gathering around.</p></div></section><section className="shell farm-body"><div className="farm-intro"><p className="eyebrow">The farm market</p><h2>Good food is a form of care.</h2><p>Seasonal produce and thoughtfully sourced staples, packed with a little more intention. Build your order below and pick it up in New Castle, Tuesday through Saturday.</p></div><FarmCatalog /></section></main></SiteShell> }
+export const metadata: Metadata = { title: 'Farm Market', description: 'Order seasonal fruit, vegetables, pasture-raised eggs, and poultry online for pickup in New Castle, Delaware, Tuesday through Saturday.' }
+
+export default function FarmPage() {
+  return <SiteShell><main className="fp"><FarmProfile /></main></SiteShell>
+}

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
+import { confirmationNumber } from '@/lib/confirmation'
 import { ensureTables, pool } from '@/lib/db'
 import { findFarmItem, formatPickupDay, isValidPickupDay, MAX_PER_ITEM } from '@/lib/farm'
 
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
       phone_number_collection: { enabled: true },
       custom_text: { submit: { message: `Pickup in New Castle on ${formatPickupDay(pickupDate)}, 9:00 am–6:00 pm.` } },
       metadata: { farmOrderId: String(orderId), pickupDate },
-      success_url: `${origin}/farm?order=success`,
+      success_url: `${origin}/farm?order=success&ref=${confirmationNumber('farm', orderId!)}`,
       cancel_url: `${origin}/farm?order=canceled`,
     })
     await pool.query('UPDATE farm_orders SET stripe_session_id = $1 WHERE id = $2', [session.id, orderId])
